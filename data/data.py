@@ -1,13 +1,13 @@
 import numpy as np
 
 from download import download
-from preprocess import transformations
+from preprocess import Transformations
 from dataloader import data_loader
 
 class CIFAR10:
     def __init__(
         self, cuda=False, batch_size=1, num_workers=1, horizontal_flip=0.0, vertical_flip=0.0,
-        rotation=0.0, cutout=0.0, random_erasing=0.0, guassian_blur=0.0
+        rotation=0.0, cutout=0.0, gaussian_blur=0.0
     ):
         """
         Initializes the CIFAR-10 dataset
@@ -27,8 +27,6 @@ class CIFAR10:
                 (default: 0)
             cutout: Probability of image being cutout 
                 (default: 0)
-            random_erasing: Probability of image being flipped horizontaly 
-                (default: 0)
             guassian_blur: Probability of image being blurred using guassian_blur
                 (default: 0)
         """
@@ -37,26 +35,30 @@ class CIFAR10:
         self.batch_size = batch_size
         self.num_workers = num_workers
 
+        self.horizontal_flip = horizontal_flip
+        self.vertical_flip = vertical_flip
+        self.rotation = rotation
+        self.cutout = cutout
+        self.gaussian_blur = gaussian_blur
+
         self._classes = (
         'plane', 'car', 'bird', 'cat', 'deer',
         'dog', 'frog', 'horse', 'ship', 'truck'
         )
-        self._sample_data = self.download_cifar10()
-        mean = self.mean
-        std = self.std
 
-        self._train_transformations = transformations(mean, std, horizontal_flip, vertical_flip, rotation, random_erasing,
-                                                     transform_train = True)
+        self._sample_data = self.download_cifar10()
+
+        self._train_transformations = self.transform()
         self._train_data = self.download_cifar10(train = True, apply_transformations = True)
 
-        self._test_transformations = transformations(mean, std)
+        self._test_transformations = self.transform(train = False)
         self._test_data = self.download_cifar10(train = False, apply_transformations = True)
         
         
     @property
     def test_data(self):
         """Returns Test Dataset"""
-      return self._test_data
+        return self._test_data
 
     @property
     def classes(self):
@@ -83,6 +85,32 @@ class CIFAR10:
         """Returns Dimension of the input image"""
         _, height, width, channels = self._sample_data.data.shape
         return tuple((channels, height, width))
+    
+    def transform(self, train=True):
+        """
+        Creates transformations to be applied
+
+        Arguments:
+            train : True if tranformations to be applied on train dataset, False for test dataset
+                (default : True)
+                
+        Returns:
+            Transformations
+        """
+        args = {'mean':self.mean,
+                'std':self.std}
+
+        if train:
+            args['train'] = True
+            args['horizontal_flip'] = self.horizontal_flip
+            args['vertical_flip'] = self.vertical_flip
+            args['rotation'] = self.rotation
+            args['cutout'] = self.cutout
+            args['cutout_height'] = self._sample_data.data.shape[1]//2
+            args['cutout_width'] = self._sample_data.data.shape[2]//2
+            args['gaussian_blur'] = self.gaussian_blur
+            
+        return Transformations(** args)
 
     def download_cifar10(self, train=True, apply_transformations=False):
         """
@@ -96,9 +124,8 @@ class CIFAR10:
             Dataset after downloading
         """
         if apply_transformations:
-            if train:
-                return download(train, self._train_transformations)
-            return download(train, self._test_transformations)
+            transform = self._train_transformations if train else self._test_transformations
+            return download(train, transform)
         else:
             return download()
 
@@ -114,4 +141,3 @@ class CIFAR10:
         data = self._train_data if train else self._test_data
         return data_loader(data, self.batch_size, self.num_workers, self.cuda)
 
-    
