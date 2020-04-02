@@ -54,7 +54,6 @@ class CIFAR10:
         self._test_transformations = self.transform(train = False)
         self._test_data = self.download_cifar10(train = False, apply_transformations = True)
         
-        
     @property
     def test_data(self):
         """Returns Test Dataset"""
@@ -140,4 +139,6 @@ class CIFAR10:
         """
         data = self._train_data if train else self._test_data
         return data_loader(data, self.batch_size, self.num_workers, self.cuda)
+
+    
 
