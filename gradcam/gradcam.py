@@ -3,7 +3,7 @@ import torch.nn.functional as F
 
 class GradCAM:
     """Calculate GradCAM saliency map.
-    Args:
+    Arguments:
         model: Model network
         layer_name: Layer of the model on which GradCAM will produce saliency map
         input: Input image
@@ -30,8 +30,7 @@ class GradCAM:
         self.saliency_map(input)
 
     def find_resnet_layer(self):
-        """
-        """
+        """Assign the target layer of the model"""
         layer_num = int(self.layer_name.lstrip('layer'))
         if layer_num == 1:
             self.target_layer = self.model.layer1
@@ -44,14 +43,11 @@ class GradCAM:
 
 
     def saliency_map(self, input, class_idx=None, retain_graph=False):
-        """
-        Args:
+        """Creates saliency map of the same spatial dimension with input
+        Arguments:
             input: input image with shape of (1, 3, H, W)
             class_idx (int): class index for calculating GradCAM.
                     If not specified, the class index that makes the highest model prediction score will be used.
-        Return:
-            mask: saliency map of the same spatial dimension with input
-            logit: model output
         """
         b, c, h, w = input.size()
 
@@ -85,4 +81,3 @@ class GradCAM:
         return self.saliency_map
 
     
-

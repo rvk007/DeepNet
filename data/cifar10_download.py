@@ -4,14 +4,10 @@ from torchvision import datasets
 
 
 def download(train = True, transform = None):
-    
-    """
-    Downloads the CIFAR-10 dataset
-
+    """Downloads the CIFAR-10 dataset
     Arguments:
         train: True to download train data, False to download test data
         transform : Transformation to be aaplied on downloaded data
-
     Returns:
         CIFAR-10 dataset 
     """

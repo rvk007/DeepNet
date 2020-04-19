@@ -4,10 +4,9 @@ import torch
 
 def visualize_cam(mask, img):
     """Make heatmap from mask and synthesize GradCAM result image using heatmap and img.
-    Args:
+    Arguments:
         mask (torch.tensor): mask shape of (1, 1, H, W) and each element has value in range [0, 1]
         img (torch.tensor): img shape of (1, 3, H, W) and each pixel value is in range [0, 1]
-        
     Return:
         heatmap (torch.tensor): heatmap img shape of (3, H, W)
         result (torch.tensor): synthesized GradCAM result of same shape with heatmap.

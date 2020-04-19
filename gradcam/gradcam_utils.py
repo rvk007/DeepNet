@@ -4,20 +4,20 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 
-from data import CIFAR10
-from gradcam import GradCAM
-from gradcam_pp import GradCAMpp
-from visualize_cam import visualize_cam
+from deepnet.data.cifar10 import CIFAR10
+from deepnet.gradcam.gradcam import GradCAM
+from deepnet.gradcam.gradcam_pp import GradCAMpp
+from deepnet.gradcam.visualize_cam import visualize_cam
 
 
 class _GradCAM:
     """Process the input image through the model and produce the GradCAM heatmap
     Arguments:
-        mean: Tuple of mean values for each channel
-        std: Tuple of standard deviation values for each channel
-        height: Required height
-        width: Required width
-        device: Device (GPU/CPU)
+        mean (tuple): Mean values for each channel
+        std (tuple): Standard deviation values for each channel
+        height (int): Required height
+        width (int): Required width
+        device (str): Device (GPU/CPU)
     """
 
     def __init__(self, mean, std, height, width, device):
@@ -98,14 +98,14 @@ class _GradCAM:
 
         #self.plot(gradcam_pp_mask)
         
-    def plot(images):
+    def plot(self, images):
         """Plot the images
         Arguments:
             images: List of saliency maps
         """
 
         results = [self.torch_img.squeeze().cpu()]
-        for map in self.gradcam_mask:
+        for map in images:
             heatmap, result = visualize_cam(map.cpu(), self.torch_img)
             results.append(result)
 
@@ -120,5 +120,4 @@ class _GradCAM:
         plt.show()
 
         
-
 

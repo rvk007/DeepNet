@@ -1,12 +1,11 @@
 import torch
 import torch.nn.functional as F
 
-from gradcam import GradCAM
+from deepnet.gradcam.gradcam import GradCAM
 
 class GradCAMpp(GradCAM):
-    """Calculate GradCAM++ salinecy map.p using heatmap and img
-        heatmap, cam_result = visualize_cam(mask, img)
-    Args:
+    """Calculate GradCAM++ salinecy map using heatmap and image
+    Arguments:
         model: Model network
         layer_name: Layer of the model on which GradCAM will produce saliency map
         input: Input image
@@ -19,14 +18,11 @@ class GradCAMpp(GradCAM):
         self.saliency_map(input)
 
     def saliency_map(self, input, class_idx=None, retain_graph=False):
-        """
-        Args:
-            input: input image with shape of (1, 3, H, W)
+        """Creates saliency map of the same spatial dimension with input
+        Arguments:
+            input (tuple): input image with shape of (1, 3, H, W)
             class_idx (int): class index for calculating GradCAM.
                     If not specified, the class index that makes the highest model prediction score will be used.
-        Return:
-            mask: saliency map of the same spatial dimension with input
-            logit: model output
         """
         b, c, h, w = input.size()
 
