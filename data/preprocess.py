@@ -6,8 +6,8 @@ from albumentations.pytorch import ToTensor
 class Transformations:
     def __init__(
     self, mean=(0.5,0.5,0.5), std=(0.5,0.5,0.5), pad_dim=(0,0), random_crop_dim=(0,0), horizontal_flip=0, 
-    vertical_flip=0, rotate_degree=0, rotation=0, cutout=0, cutout_dim=(1,1), gaussian_blur=0, train=False
-    ):
+    vertical_flip=0, rotate_degree=0, rotation=0, cutout=0, cutout_dim=(1,1), gaussian_blur=0, train=False,
+    modest_input=True):
 
         """Transformations to be applied on the data
         Arguments:
@@ -32,7 +32,7 @@ class Transformations:
             cutout (int, optional): Probability of image being cutout 
                 (default: 0)
             cutout_dim (list, optional): Cutout a random part of the image
-                cutout_dim[0]: height of the cutout (int)
+                cutout_dimtransformations.append(ToTensor())[0]: height of the cutout (int)
                 cutout_dim[1]: width of the cutout (int)
                 (default: (1,1))
             transform_train : If True, transformations for training data else for testing data
@@ -67,7 +67,8 @@ class Transformations:
                                                    min_height=1, min_width=1, p=cutout))
 
         transformations.append(A.Normalize(mean=mean, std=std,always_apply=True))
-        transformations.append(ToTensor())
+        if modest_input:
+            transformations.append(ToTensor())
 
         self.transform= A.Compose(transformations)
 

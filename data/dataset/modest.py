@@ -75,16 +75,16 @@ class ModestMuseum(BaseDataset):
         self._train_transformations = {
             'bg':self.transform(self.mean['bg'], self.std['bg']),
             'bg_fg':self.transform(self.mean['bg_fg'], self.std['bg_fg']),
-            'bg_fg_mask':self.transform(self.mean['bg_fg_mask'], self.std['bg_fg_mask'], inputs=False),
-            'bg_fg_depth':self.transform(self.mean['bg_fg_depth'], self.std['bg_fg_depth'], inputs=False)
+            'bg_fg_mask':self.transform(self.mean['bg_fg_mask'], self.std['bg_fg_mask'], modest_input=False),
+            'bg_fg_depth':self.transform(self.mean['bg_fg_depth'], self.std['bg_fg_depth'], modest_input=False)
             }
         train_data = self.download(train = True)
 
         self._test_transformations = {
             'bg':self.transform(self.mean['bg'], self.std['bg'], train=False),
             'bg_fg':self.transform(self.mean['bg_fg'], self.std['bg_fg'], train=False),
-            'bg_fg_mask':self.transform(self.mean['bg_fg_mask'], self.std['bg_fg_mask'], train=False),
-            'bg_fg_depth':self.transform(self.mean['bg_fg_depth'], self.std['bg_fg_depth'], train=False)
+            'bg_fg_mask':self.transform(self.mean['bg_fg_mask'], self.std['bg_fg_mask'], train=False, modest_input=False),
+            'bg_fg_depth':self.transform(self.mean['bg_fg_depth'], self.std['bg_fg_depth'], train=False, modest_input=False)
             }
         test_data = self.download(train = False)
         return train_data, test_data
@@ -145,9 +145,15 @@ class Download(Dataset):
         '''Return the data'''
 
         data = self.dataset[idx]
-        bg_image = self.transforms['bg'](Image.open(data['bg']))
-        bg_fg_image = self.transforms['bg_fg'](Image.open(data['bg_fg']))
+        bg = self.transforms['bg'](Image.open(data['bg']))
+        bg_fg = self.transforms['bg_fg'](Image.open(data['bg_fg']))
         bg_fg_mask = self.transforms['bg_fg_mask'](Image.open(data['bg_fg_mask']))
         bg_fg_depth = self.transforms['bg_fg_depth'](Image.open(data['bg_fg_depth']))
 
-        return tuple((bg_image, bg_fg_image, bg_fg_mask, bg_fg_depth))
+        data = {
+            'bg' : bg,
+            'bg_fg' : bg_fg,
+            'bg_fg_mask' : bg_fg_mask,
+            'bg_fg_depth' : bg_fg_depth
+        }
+        return data

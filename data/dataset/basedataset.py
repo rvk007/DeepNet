@@ -85,7 +85,7 @@ class BaseDataset:
         raise NotImplementedError
     
 
-    def transform(self, mean, std, train=True, inputs=True):
+    def transform(self, mean, std, train=True, modest_input=True):
         """Creates transformations to be applied
         Arguments:
             train : True if tranformations to be applied on train dataset, False for test dataset
@@ -93,10 +93,13 @@ class BaseDataset:
         Returns:
             Transformations
         """
-        args = {'mean':mean,
-                'std':std}
+        args = {
+            'mean':mean,
+            'std':std,
+            'modest_input':modest_input
+            }
 
-        if train and inputs:
+        if train and modest_input:
             args['train'] = True
             args['pad_dim'] = self.pad_dim
             args['random_crop_dim'] = self.random_crop_dim
