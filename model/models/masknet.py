@@ -38,7 +38,7 @@ class MaskNet2(nn.Module):
 
         return xx
 
-    def learner(self, model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, callbacks):
+    def learner(self, model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks):
         """Trains the model
         Arguments:
             model: Model to trained and validated
@@ -52,7 +52,7 @@ class MaskNet2(nn.Module):
                     (default : None)
         """
 
-        learn = Model(model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, callbacks)
+        learn = Model(model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks)
         self.train_losses, self.train_accuracies, self.test_losses, self.test_accuracies = learn.fit()
 
     @property

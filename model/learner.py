@@ -5,9 +5,8 @@ from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau, OneCycleLR
 from deepnet.utils.checkpoint import Checkpoint
 
 class Model:
-    def __init__(
-        self, model, dataset, train_loader, test_loader, device, optimizer, criterion,
-        epochs, callbacks=None
+    def __init__(self, model, dataset, train_loader, test_loader, device, optimizer, criterion, 
+        epochs, metrics, callbacks=None
     ):
         """ Trains and validate the model
         Arguments:
@@ -30,6 +29,7 @@ class Model:
         self.optimizer=optimizer
         self.criterion=criterion
         self.epochs=epochs
+        self.metrics = metrics
         self.callbacks=callbacks
 
     def fit(self):
@@ -51,13 +51,13 @@ class Model:
 
 
         for epoch in range(1, self.epochs + 1):
-            if self.checkpoint.reload:
+            if self.checkpoint.last_reload:
                 self.reload_last_checkpoint()
 
             print(f'Epoch {epoch}:')
 
             self.dataset.train(
-                self.model, self.train_loader, self.device, self.optimizer, self.criterion, self.train_losses,
+                self.model, self.train_loader, self.device, self.optimizer, self.criterion, self.metrics, self.train_losses,
                 self.train_accuracies, self.scheduler
             )
 
@@ -65,7 +65,7 @@ class Model:
                 self.scheduler['StepLR'].step()
 
             val_loss, val_acc = self.dataset.test(
-                self.model, self.test_loader, self.device, self.criterion, self.test_losses,
+                self.model, self.test_loader, self.device, self.criterion, self.metrics, self.test_losses,
                 self.test_accuracies,last_epoch
             )
 

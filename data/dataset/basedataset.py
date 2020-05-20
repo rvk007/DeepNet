@@ -6,8 +6,8 @@ from deepnet.data.dataloader import data_loader
 class BaseDataset:
     def __init__(
         self, cuda=False, batch_size=1, num_workers=1, path=None,
-        pad_dim=(0,0), random_crop_dim=(0,0), horizontal_flip=0.0,
-        vertical_flip=0.0, rotate_degree=0.0, rotation=0.0, cutout=0.0,
+        pad_dim=(0,0), random_crop_dim=(0,0), resize=(0,0),
+        horizontal_flip=0.0, vertical_flip=0.0, rotate_degree=0.0, rotation=0.0, cutout=0.0,
         cutout_dim=(1,1), gaussian_blur=0.0, train_test_split=0.7, seed=1
         ):
         """Initializes the Tiny Imagenet dataset

@@ -5,9 +5,9 @@ from albumentations.pytorch import ToTensor
 
 class Transformations:
     def __init__(
-    self, mean=(0.5,0.5,0.5), std=(0.5,0.5,0.5), pad_dim=(0,0), random_crop_dim=(0,0), horizontal_flip=0, 
-    vertical_flip=0, rotate_degree=0, rotation=0, cutout=0, cutout_dim=(1,1), gaussian_blur=0, train=False,
-    modest_input=True):
+    self, mean=(0.5,0.5,0.5), std=(0.5,0.5,0.5), pad_dim=(0,0), random_crop_dim=(0,0), resize=(0,0),
+    horizontal_flip=0, vertical_flip=0, rotate_degree=0, rotation=0, cutout=0, cutout_dim=(1,1),
+    gaussian_blur=0, train=False, modest_input=True):
 
         """Transformations to be applied on the data
         Arguments:
@@ -66,9 +66,13 @@ class Transformations:
                                                    max_height=cutout_dim[0],max_width=cutout_dim[1],
                                                    min_height=1, min_width=1, p=cutout))
 
-        transformations.append(A.Normalize(mean=mean, std=std,always_apply=True))
         if modest_input:
-            transformations.append(ToTensor())
+            transformations.append(A.Normalize(mean=mean, std=std,always_apply=True))
+
+        if sum(resize)>0:
+            transformations.append(A.Resize(height=resize[0], width=resize[1], interpolation=1, always_apply=False, p=1))
+
+        transformations.append(ToTensor())
 
         self.transform= A.Compose(transformations)
 
