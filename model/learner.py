@@ -66,7 +66,7 @@ class Model:
 
             val_loss, val_acc = self.dataset.test(
                 self.model, self.test_loader, self.device, self.criterion, self.metrics, self.test_losses,
-                self.test_accuracies,last_epoch
+                self.test_accuracies
             )
 
             if 'ReduceLROnPlateau' in self.scheduler:

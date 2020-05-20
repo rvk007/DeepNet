@@ -1,4 +1,4 @@
-def MSELoss(size_average=None, reduce=None, reduction='mean'):
+def mse_loss(size_average=None, reduce=None, reduction='mean'):
     """Creates a criterion that measures the mean squared error (squared L2 norm) between each element in the input xx and target yy
     Arguments:
         size_average (bool, optional) : By default, the losses are averaged over each loss element in the batch. Note that for some losses, there are multiple
@@ -15,7 +15,7 @@ def MSELoss(size_average=None, reduce=None, reduction='mean'):
     return nn.MSELoss(size_average, reduce, reduction)
 
 
-def BCEloss(weight=None, size_average=None, reduce=None, reduction='mean'):
+def bce_loss(weight=None, size_average=None, reduce=None, reduction='mean'):
     """Creates a criterion that measures the Binary Cross Entropy
     between the target and the output
     Arguments:
@@ -34,7 +34,7 @@ def BCEloss(weight=None, size_average=None, reduce=None, reduction='mean'):
     return nn.BCEloss(weight, size_average, reduce, reduction)
 
 
-def BCEWithLogitsLoss(weight=None, size_average=None, reduce=None, reduction='mean', pos_weight=None):
+def bcewithlogits_loss(weight=None, size_average=None, reduce=None, reduction='mean', pos_weight=None):
     """Creates a criterion that combines a `Sigmoid` layer and the `BCELoss` in one single
     class
     Arguments:

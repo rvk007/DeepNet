@@ -26,6 +26,10 @@ class BaseDataset:
                 random_crop_dim[0]: height of the crop (int)
                 random_crop_dim[1]: width of the crop (int)
                 (default: (0,0))
+            resize (tuple, optional): Resize input
+                resize[0]: new height of the input (int)
+                resize[1]: new width of the input (int)
+                (default: (0,0))
             horizontal_flip: Probability of image being flipped horizontaly 
                 (default: 0)
             vertical_flip: Probability of image being flipped vertically 
@@ -53,6 +57,7 @@ class BaseDataset:
         self.path = path
         self.pad_dim = pad_dim
         self.random_crop_dim = random_crop_dim
+        self.resize = resize
         self.horizontal_flip = horizontal_flip
         self.vertical_flip = vertical_flip
         self.rotate_degree = rotate_degree
@@ -96,7 +101,8 @@ class BaseDataset:
         args = {
             'mean':mean,
             'std':std,
-            'modest_input':modest_input
+            'modest_input':modest_input,
+            'resize': self.resize
             }
 
         if train and modest_input:

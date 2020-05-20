@@ -15,13 +15,17 @@ class Transformations:
                 (default: (0.5,0.5,0.5))
             std : Tuple of standard deviation values for each channel
                 (default: (0.5,0.5,0.5))
-            pad_dim (list, optional): Pad side of the image
+            pad_dim (tuple, optional): Pad side of the image
                 pad_dim[0]: minimal result image height (int)
                 pad_dim[1]: minimal result image width (int)
                 (default: (0,0))
-            random_crop_dim (list, optional): Crop a random part of the input
+            random_crop_dim (tuple, optional): Crop a random part of the input
                 random_crop_dim[0]: height of the crop (int)
                 random_crop_dim[1]: width of the crop (int)
+                (default: (0,0))
+            resize (tuple, optional): Resize input
+                resize[0]: new height of the input (int)
+                resize[1]: new width of the input (int)
                 (default: (0,0))
             horizontal_flip (float, optional): Probability of image being flipped horizontaly 
                 (default: 0)
