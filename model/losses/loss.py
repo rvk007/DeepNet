@@ -1,3 +1,5 @@
+import torch.nn as nn
+
 def mse_loss(size_average=None, reduce=None, reduction='mean'):
     """Creates a criterion that measures the mean squared error (squared L2 norm) between each element in the input xx and target yy
     Arguments:

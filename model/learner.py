@@ -57,7 +57,7 @@ class Model:
             print(f'Epoch {epoch}:')
 
             self.dataset.train(
-                self.model, self.train_loader, self.device, self.optimizer, self.criterion, self.metrics, self.train_losses,
+                epoch, self.model, self.train_loader, self.device, self.optimizer, self.criterion, self.metrics, self.train_losses,
                 self.train_accuracies, self.scheduler
             )
 
@@ -65,7 +65,7 @@ class Model:
                 self.scheduler['StepLR'].step()
 
             val_loss, val_acc = self.dataset.test(
-                self.model, self.test_loader, self.device, self.criterion, self.metrics, self.test_losses,
+                epoch, self.model, self.test_loader, self.device, self.criterion, self.metrics, self.test_losses,
                 self.test_accuracies
             )
 
