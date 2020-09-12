@@ -1,4 +1,8 @@
-# DeepNet
+<p align="center">
+  <img src="images/3.png" alt="tensornet" />
+  <br />
+</p>
+
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1g63kM2rq3pktpTx5neqNlbSVYeT9xvEk)  
 
@@ -26,6 +30,22 @@ DeepNet currently supports the following features:
 | [MaskNet3](./model/models/masknet.py) | A model to predict the Segmentation mask of the given image. |
 | [DepthMaskNet8](./model/models/depthnet.py) | A model to predict the Monocular Depth Maps of the given image. |
 
+### Training and Validation
+
+| Functionality | Description |
+| ------- | ----- |
+| [Train](/home/rvk/DeepNet/model/train.py) | Training and Validation of the model |
+| [Model](/home/rvk/DeepNet/model/learner.py) | Handles all the function for training a model  |
+| [Dataset](/home/rvk/DeepNet/data/dataset) | Contains classes to handle data for training the model|
+
+### Metrics
+
+- [Mean Absolute Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L36)
+- [Root Mean Squared Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L50)
+- [Mean Absolute Relative Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L67)
+- [Intersection Over Union Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L84)
+- [Root Mean Square Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L130)
+
 ### Losses
 
 | Loss | Description |
@@ -47,11 +67,28 @@ Weighted Combination of loss functions
 - [BCE-DICE](https://github.com/rvk007/DeepNet/blob/44ea35c02df7e719fc5c7f2f0c5da6f0cbfec4e3/model/losses/loss_combination.py#L79)
 - [RMSE-BCE-DICE](https://github.com/rvk007/DeepNet/blob/44ea35c02df7e719fc5c7f2f0c5da6f0cbfec4e3/model/losses/loss_combination.py#L103)
 
+### Scheduler
+
+- StepLR
+- ReduceLROnPlateau
+- OneCycleLR
+
+### Data Augmentation
+
+  - Resize
+  - Padding
+  - Random Crop
+  - Horizontal Flip
+  - Vertical Flip
+  - Gaussian Blur
+  - Random Rotation
+  - CutOut
+
 ### Utilities
 
 | Utility | Description |
 | ------- | ----- |
-| [GRADCAM](./gradcam/gradcam.py) | Calculates GradCAM saliency map |
+| [GRADCAM](./gradcam/gradcam.py) | Calculates GradCAM(Gradient-weighted Class Activation Map) saliency map |
 | [GradCAMpp](./gradcam/gradcam_pp.py) | Calculate GradCAM++ salinecy map using heatmap and image |
 | [LRFinder](./lr_finder/lr_finder.py) | Range test to calculate optimal Learning Rate  |
 | [Checkpoint](./utils/checkpoint.py) | Loading and saving checkpoints  |
@@ -60,29 +97,18 @@ Weighted Combination of loss functions
 | [Summary](./utils/summary.py)| Display model summary |
 | [Plot](./utils/plot.py)| Plot the graph of a metric, prediction image and class accuracy |
 
+## Dependencies
 
+DeepNet has the following third-party dependencies
 
-### Training and Validation
-
-| Functionality | Description |
-| ------- | ----- |
-| [Train](/home/rvk/DeepNet/model/train.py) | Training and Validation of the model |
-| [Model](/home/rvk/DeepNet/model/learner.py) | Handles all the function for training a model  |
-| [Dataset](/home/rvk/DeepNet/data/dataset) | Contains classes to handle data for training the model|
-
-
-### Metrics
-
-- [Mean Absolute Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L36)
-- [Root Mean Squared Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L50)
-- [Mean Absolute Relative Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L67)
-- [Intersection Over Union Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L84)
-- [Root Mean Square Error](https://github.com/rvk007/DeepNet/blob/f67732d2d65798289925ea76d58f1d8636f13273/model/metrics.py#L130)
-
-### Scheduler
-- StepLR
-- ReduceLROnPlateau
-- OneCycleLR
+- numpy
+- torch
+- torchvision
+- torchsummary
+- tqdm
+- matplotlib
+- albumentations
+- opencv-python
 
 For a demo on how to use these modules, refer to the notebooks present in the [examples](./examples) directory.
 
