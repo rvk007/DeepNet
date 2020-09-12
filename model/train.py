@@ -8,6 +8,7 @@ from deepnet.model.losses.dice_loss import DiceLoss
 from deepnet.utils.progress_bar import ProgressBar
 
 class Train:
+    """ Train the model"""
     def __init__(self):
         return
 

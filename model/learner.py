@@ -10,7 +10,7 @@ class Model:
     def __init__(self, start_epoch, model, tensorboard, dataset, train_loader, test_loader, device, optimizer, criterion, 
         epochs, metrics, callbacks=None
     ):  
-        """Trains the model
+        """Handles all the function for training a model 
         Arguments:
             model: Model to trained and validated
             tensorboard: Tensorboard instance for visualization

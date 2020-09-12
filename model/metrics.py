@@ -4,8 +4,7 @@ import math
 
 class Metric:
     """
-    Calculates the mean absolute error.
-    - `update` must receive output of the form `(y_pred, y)` or `{'y_pred': y_pred, 'y': y}`.
+    Calculates the metrics to evaluate a model
     """
     def __init__(self):
         self._sum_of_errors_mae = 0.0
@@ -34,7 +33,7 @@ class Metric:
         self._num_examples_rmse_new = 0
     
     def mae(self, output):
-        """Calculate cummulative metric value
+        """Calculate Mean Absolute Error
         Arguments:
             output(tuple): A tuple (prediction tensor, ground truth tensor)
         """
@@ -49,8 +48,7 @@ class Metric:
 
     def rmse(self,output):
         """
-        Calculates the mean squared error.
-        - `update` must receive output of the form `(y_pred, y)` or `{'y_pred': y_pred, 'y': y}`.
+        Calculates the Root Mean Squared Error
         Arguments:
             output(tuple): A tuple (prediction tensor, ground truth tensor)
         """
