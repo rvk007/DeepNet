@@ -8,7 +8,8 @@ class BaseDataset:
         self, cuda=False, batch_size=1, num_workers=1, path=None,
         pad_dim=(0,0), random_crop_dim=(0,0), resize=(0,0),
         horizontal_flip=0.0, vertical_flip=0.0, rotate_degree=0.0, rotation=0.0, cutout=0.0,
-        cutout_dim=(1,1), gaussian_blur=0.0, train_test_split=0.7, seed=1
+        cutout_dim=(1,1), hsv=0.0, iso_noise=0.0, bright_contrast=0.0, gaussian_blur=0.0,
+        train_test_split=0.7, seed=1
         ):
         """Initializes the Tiny Imagenet dataset
         Arguments:
@@ -64,6 +65,9 @@ class BaseDataset:
         self.rotation = rotation
         self.cutout = cutout
         self.cutout_dim = cutout_dim
+        self.hsv = hsv
+        self.iso_noise = iso_noise
+        self.bright_contrast = bright_contrast
         self.gaussian_blur = gaussian_blur
 
         self.train_test_split = train_test_split
@@ -114,6 +118,9 @@ class BaseDataset:
             args['rotation'] = self.rotation
             args['cutout'] = self.cutout
             args['cutout_dim'] = self.cutout_dim
+            args['hsv'] = self.hsv
+            args['iso_noise'] = self.iso_noise
+            args['bright_contrast'] = self.bright_contrast
             args['gaussian_blur'] = self.gaussian_blur
             
         return Transformations(** args)

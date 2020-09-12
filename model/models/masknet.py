@@ -4,58 +4,67 @@ import torch.nn.functional as F
 
 from deepnet.model.learner import Model
 
-class MaskNet2(nn.Module):
+class MaskNet3(nn.Module):
     def __init__(self):
-        super(MaskNet2, self).__init__()
+        """Creates Masknet-3"""
+        super(MaskNet3, self).__init__()
 
-        self.conv_layer = nn.Sequential(
+        self.layer1 = nn.Sequential(
             nn.Conv2d(3, 32, kernel_size=3, padding=1),
             nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.MaxPool2d(2),
+            nn.ReLU()
+        )
+
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU()
+        )
+
+        self.layer3= nn.Sequential(
             nn.Conv2d(64, 64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128),
+            nn.Conv2d(64, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
+            nn.Conv2d(64, 1, kernel_size=1)
         )
-        self.last= nn.Conv2d(256, 1, kernel_size=1)
+        
 
     def forward(self, x):
-        v = x['bg']
-        z = x['bg_fg']
-        # v=z=x
-        v = self.conv_layer(v)
-        z = self.conv_layer(z)
+        bg = x['bg']
+        bg_fg = x['bg_fg']
+        bg = self.layer1(bg)
+        bg_fg = self.layer2(bg_fg)
 
-        xx = torch.cat([v,z], dim=1)
-        xx = F.interpolate(xx,  scale_factor=2, mode='bilinear', align_corners=True)
-        xx = self.last(xx)
+        out = torch.cat([bg, bg_fg], dim=1)
+        out = self.layer3(out)
 
-        return xx
+        return out
 
-    def learner(self, model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks):
+    def learner(self, model, tensorboard, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks):
         """Trains the model
         Arguments:
             model: Model to trained and validated
+            tensorboard: Tensorboard instance for visualization
+            dataset_train: Dataset training instance
             train_loader: Dataloader containing train data on the GPU/ CPU
             test_loader: Dataloader containing test data on the GPU/ CPU 
             device: Device on which model will be trained (GPU/CPU)
             optimizer: optimizer for the model
             criterion: Loss function
             epochs: Number of epochs to train the model
+            metrics(bool): If metrics is to be displayed or not
+                (default: False)
             callbacks: Scheduler to be applied on the model
                     (default : None)
         """
 
-        learn = Model(model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks)
-        self.train_losses, self.train_accuracies, self.test_losses, self.test_accuracies = learn.fit()
+        learn = Model(model, tensorboard, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks)
+        self.result = learn.fit()
 
     @property
     def results(self):
         """Returns model results"""
-        return self.train_losses, self.train_accuracies, self.test_losses, self.test_accuracies
+        return self.result

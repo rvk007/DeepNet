@@ -79,24 +79,28 @@ class ResNet(nn.Module):
         out = self.linear(out)
         return out
 
-    def learner(self, model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks):
+    def learner(self, model, tensorboard, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks):
         """Trains the model
         Arguments:
             model: Model to trained and validated
+            tensorboard: Tensorboard instance for visualization
+            dataset_train: Dataset training instance
             train_loader: Dataloader containing train data on the GPU/ CPU
             test_loader: Dataloader containing test data on the GPU/ CPU 
             device: Device on which model will be trained (GPU/CPU)
             optimizer: optimizer for the model
             criterion: Loss function
             epochs: Number of epochs to train the model
+            metrics(bool): If metrics is to be displayed or not
+                (default: False)
             callbacks: Scheduler to be applied on the model
                     (default : None)
         """
 
-        learn = Model(model, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks)
-        self.train_losses, self.train_accuracies, self.test_losses, self.test_accuracies = learn.fit()
+        learn = Model(model, tensorboard, dataset_train, train_loader, test_loader, device, optimizer, criterion, epochs, metrics, callbacks)
+        self.result = learn.fit()
 
     @property
     def results(self):
         """Returns model results"""
-        return self.train_losses, self.train_accuracies, self.test_losses, self.test_accuracies
+        return self.result

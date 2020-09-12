@@ -40,10 +40,10 @@ class ModestMuseum(BaseDataset):
         # channels, height, width = self._train_data[0][0].shape
         # return tuple((channels, height, width))
         return dict({
-            'bg': (224,224,3),
-            'bg_fg':(224,224,3),
-            'bg_fg_mask':(224,224,1),
-            'bg_fg_depth':(224,224,1)
+            'bg': (3,224,224),
+            'bg_fg':(3,224,224),
+            'bg_fg_mask':(1,224,224),
+            'bg_fg_depth':(1,224,224)
         })
     
 
