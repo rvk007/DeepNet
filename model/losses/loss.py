@@ -1,4 +1,6 @@
 import torch.nn as nn
+import math
+import torch
 
 def mse_loss(size_average=None, reduce=None, reduction='mean'):
     """Creates a criterion that measures the mean squared error (squared L2 norm) between each element in the input xx and target yy
@@ -54,5 +56,20 @@ def bcewithlogits_loss(weight=None, size_average=None, reduce=None, reduction='m
         BCEWithLogitsLoss
     """
     return nn.BCEWithLogitsLoss(weight, size_average, reduce, reduction, pos_weight)
+
+
+class RMSELoss(nn.Module):
+    def __init__(self, eps=1e-6):
+        super().__init__()
+        self.mse = nn.MSELoss()
+        self.eps = eps
+        
+    def forward(self,yhat,y):
+        loss = torch.sqrt(self.mse(yhat,y) + self.eps)
+        return loss
+
+
+def rmse_loss():
+    return RMSELoss()
 
 
